@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.my.blog.website.model.Vo.ContentVo">
     <id column="cid" jdbcType="INTEGER" property="cid" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="summary" jdbcType="VARCHAR" property="summary" />
     <result column="slug" jdbcType="VARCHAR" property="slug" />
     <result column="created" jdbcType="INTEGER" property="created" />
     <result column="modified" jdbcType="INTEGER" property="modified" />
@@ -80,7 +81,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    cid, title, slug, created, modified, author_id, type, status, tags, categories, hits, 
+    cid, title,summary, slug, created, modified, author_id, type, status, tags, categories, hits,
     comments_num, allow_comment, allow_ping, allow_feed
   </sql>
   <sql id="Blob_Column_List">
@@ -143,13 +144,13 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.my.blog.website.model.Vo.ContentVo" useGeneratedKeys="true" keyProperty="cid">
-    insert into t_contents (cid, title, slug, 
-      created, modified, author_id, 
-      type, status, tags, 
+    insert into t_contents (cid, title,summary, slug,
+      created, modified, author_id,
+      type, status, tags,
       categories, hits, comments_num, 
       allow_comment, allow_ping, allow_feed, 
       content)
-    values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, 
+    values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},#{summary,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
       #{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
       #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER}, 
@@ -164,6 +165,9 @@
       </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="summary != null">
+        summary,
       </if>
       <if test="slug != null">
         slug,
@@ -214,6 +218,9 @@
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="summary != null">
+        #{summary,jdbcType=VARCHAR},
       </if>
       <if test="slug != null">
         #{slug,jdbcType=VARCHAR},

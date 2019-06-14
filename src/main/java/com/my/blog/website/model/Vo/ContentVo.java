@@ -17,6 +17,11 @@ public class ContentVo implements Serializable {
     private String title;
 
     /**
+     * 文章摘要
+     */
+    private String summary;
+
+    /**
      * 内容缩略名
      */
     private String slug;
@@ -214,5 +219,13 @@ public class ContentVo implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }

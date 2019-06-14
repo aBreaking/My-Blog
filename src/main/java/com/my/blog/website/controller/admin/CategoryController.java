@@ -31,8 +31,10 @@ public class CategoryController extends BaseController {
     public String index(HttpServletRequest request) {
         List<MetaDto> categories = metasService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS);
         List<MetaDto> tags = metasService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS);
+        List<MetaDto> columns = metasService.getMetaList(Types.COLUMN.getType(), null, WebConst.MAX_POSTS);
         request.setAttribute("categories", categories);
         request.setAttribute("tags", tags);
+        request.setAttribute("columns", columns);
         return "admin/category";
     }
 

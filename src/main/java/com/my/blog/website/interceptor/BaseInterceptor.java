@@ -80,6 +80,9 @@ public class BaseInterceptor implements HandlerInterceptor {
         httpServletRequest.setAttribute("commons", commons);//一些工具类和公共方法
         httpServletRequest.setAttribute("option", ov);
         httpServletRequest.setAttribute("adminCommons", adminCommons);
+        httpServletRequest.setAttribute("columns", cache.hget("meta",Types.COLUMN.getType()));
+        httpServletRequest.setAttribute("category", cache.hget("meta",Types.CATEGORY.getType()));
+        httpServletRequest.setAttribute("archives", cache.get("archives"));
     }
 
     @Override

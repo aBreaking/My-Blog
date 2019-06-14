@@ -76,6 +76,7 @@ public class IndexController extends BaseController {
         p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
         PageInfo<ContentVo> articles = contentService.getContents(p, limit);
         request.setAttribute("articles", articles);
+
         if (p > 1) {
             this.title(request, "第" + p + "页");
         }

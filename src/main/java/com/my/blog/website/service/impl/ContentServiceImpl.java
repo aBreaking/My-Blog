@@ -80,6 +80,10 @@ public class ContentServiceImpl implements IContentService {
             contents.setSlug(null);
         }
 
+        if (null == contents.getSummary()){
+            contents.setSummary(defaultSummary(contents.getContent()));
+        }
+
         contents.setContent(EmojiParser.parseToAliases(contents.getContent()));
 
         int time = DateKit.getCurrentUnixTime();
@@ -223,5 +227,10 @@ public class ContentServiceImpl implements IContentService {
         metasService.saveMetas(cid, contents.getTags(), Types.TAG.getType());
         metasService.saveMetas(cid, contents.getCategories(), Types.CATEGORY.getType());
         return WebConst.SUCCESS_RESULT;
+    }
+
+    private String defaultSummary(String content){
+        int defaultSize = 200;
+        return content.length()<defaultSize?content:content.substring(0,defaultSize);
     }
 }

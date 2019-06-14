@@ -1,5 +1,6 @@
 package com.my.blog.website.controller.admin;
 
+import com.my.blog.website.ApplicationCache;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.controller.BaseController;
@@ -46,6 +47,9 @@ public class IndexController extends BaseController {
     @Resource
     private IUserService userService;
 
+    @Resource
+    private ApplicationCache applicationCache;
+
     /**
      * 页面跳转
      * @return
@@ -53,6 +57,7 @@ public class IndexController extends BaseController {
     @GetMapping(value = {"","/index"})
     public String index(HttpServletRequest request){
         LOGGER.info("Enter admin index method");
+        applicationCache.afterPropertiesSet();
         List<CommentVo> comments = siteService.recentComments(5);
         List<ContentVo> contents = siteService.recentContents(5);
         StatisticsBo statistics = siteService.getStatistics();

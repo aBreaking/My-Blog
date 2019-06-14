@@ -3,6 +3,7 @@ package com.my.blog.website.dto;
 public enum Types {
     TAG("tag"),
     CATEGORY("category"),
+    COLUMN("column"),
     ARTICLE("post"),
     PUBLISH("publish"),
     PAGE("page"),
