@@ -211,7 +211,7 @@ body.is-preload:before {
 
     #page-wrapper {
         height: auto;
-        padding: 1rem;
+        padding: 2.5rem;
     }
 
 }
@@ -326,6 +326,7 @@ body.is-preload #wrapper {
         -ms-flex-direction: column;
         flex-direction: column;
         height: auto;
+        width: 100%;
         margin: 0 0 5rem 0;
         box-shadow: 0 0.25rem 1.5rem 0.25rem rgba(46, 43, 55, 0.5);
         padding-right: 0px;
@@ -354,6 +355,7 @@ body.is-preload #wrapper {
 
     #wrapper {
         box-shadow: none;
+        margin-top: 2rem;
     }
 
     body.is-preload #wrapper {
@@ -1115,6 +1117,7 @@ body.is-preload #wrapper {
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column;
+    min-width: 20rem;
     width: auto;
     max-width: 25rem;
     overflow-y: auto;
@@ -1615,6 +1618,7 @@ body.is-preload #wrapper {
         -webkit-flex-direction: column;
         -ms-flex-direction: column;
         flex-direction: column;
+        margin-left: 0px;
         height: auto;
     }
 
@@ -1669,6 +1673,7 @@ body.is-preload #wrapper {
     .panel > .intro {
         padding: 2.8875rem 1.75rem 1.3875rem 1.75rem ;
         width: 100% !important;
+        max-width: 100% !important;
     }
 
     .panel > .intro.joined {

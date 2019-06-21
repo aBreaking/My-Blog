@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<head>
+	<head th:fragment="head">
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta http-equiv="Cache-Control" content="no-transform"/>
@@ -11,8 +11,15 @@
 		<link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/row.css}" />
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css}" />
+		<script th:src="@{/halcyonic/assets/js/jquery.min.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/browser.min.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/breakpoints.min.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/scroll.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/util.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/main.js}"></script>
 		<script th:src="@{/halcyonic/assets/js/myutil.js}"></script>
 	</head>
+
 	<body>
 		<div id="header" th:fragment="nav">
 			<div class="container">
@@ -26,14 +33,44 @@
 			</div>
 		</div>
 		<div id="page-wrapper">
-
 				<!-- Content -->
 				<section id="content" class="topic">
 					<div class="container">
 						<div class="row aln-center">
-							<div class="col-3 col-12-medium">
 
-								<section>
+
+							<div class="col-9 col-9-medium col-12-small" >
+								<section th:each="article: ${articles.list}">
+									<div class="row">
+										<div class="col-8 col-12-small">
+											<header>
+												<h2><a class="index-title" th:href="${commons.permalink(article)}" th:text="${article.title}">...</a></h2>
+												<small>
+													<script th:inline="javascript">
+														var ts = [[${article.created}]]
+														document.write(dateFormatByTimestamp(ts));
+													</script>
+												</small>
+												| <small th:utext="${commons.show_categories(article.categories)}"></small>
+											</header>
+											<p>
+												<div th:text="${article.summary}"></div>
+											</p>
+										</div>
+										<div class="col-4 col-12-small post-thumbnail" >
+											<a th:href="${commons.permalink(article)}">
+												<div th:style="'background-image:url('+@{${commons.show_thumb(article)}}+');'"></div>
+											</a>
+
+										</div>
+									</div>
+								</section>
+								<div th:replace="comm/macros::pageNav(${articles},'←','→','page')"></div>
+							</div>
+
+							<div class="col-3 col-3-medium col-12-small">
+
+								<section class="nav">
 									<header>
 										<h3>分类</h3>
 									</header>
@@ -70,35 +107,6 @@
 									</ul>
 								</section>
 							</div>
-
-							<div class="col-9 col-12-medium" >
-								<section th:each="article: ${articles.list}">
-									<div class="row">
-										<div class="col-8 col-12-medium">
-											<header>
-												<h2><a class="index-title" th:href="${commons.permalink(article)}" th:text="${article.title}">...</a></h2>
-												<small>
-													<script  type="text/javascript" th:inline="javascript">
-														var ts = [[${article.created}]]
-														document.write(dateFormatByTimestamp(ts));
-													</script>
-												</small>
-												| <small th:utext="${commons.show_categories(article.categories)}"></small>
-											</header>
-											<p>
-												<div th:text="${article.summary}"></div>
-											</p>
-										</div>
-										<div class="col-4 col-12-medium post-thumbnail" >
-											<a th:href="${commons.permalink(article)}">
-												<div th:style="'background-image:url('+@{${commons.show_thumb(article)}}+');'"></div>
-											</a>
-
-										</div>
-									</div>
-								</section>
-								<div th:replace="comm/macros::pageNav(${articles},'←','→','page')"></div>
-							</div>
 						</div>
 					</div>
 				</section>
@@ -113,5 +121,9 @@
 				</section>
 		</div>
 
+
 	</body>
+
+
+
 </html>

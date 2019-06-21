@@ -1,14 +1,12 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Two Column 2 - Halcyonic by HTML5 UP</title>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-    <link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/halcyonic/assets/css/row.css}"/>
-    <link rel="stylesheet" th:href="@{/halcyonic/assets/css/github-markdown.css}"/>
-    <link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css"/>
-</head>
+
+<head th:replace="themes/halcyonic/index :: head"></head>
+<link rel="stylesheet" th:href="@{/halcyonic/assets/css/github-markdown.css}"/>
+<link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css"/>
+<script src="//cdn.bootcss.com/headroom/0.9.1/headroom.min.js"></script>
+<script src="//cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js"></script>
+
 <body>
 <!-- Header -->
 <div th:replace="themes/halcyonic/index :: nav"></div>
@@ -18,15 +16,7 @@
     <article id="content">
         <div class="container">
             <div class="row">
-                <div class="col-3 col-12-medium">
-                    <!-- Sidebar -->
-                    <section id="directory-content" class="directory-content">
-                        <h4><a href="#text-title" th:text="${article.title}"></a></h4>
-                        <div id="directory"></div>
-                        <h4><a href="#comments">发表评论</a></h4>
-                        <h4><a href="#comments-list">最新评论</a></h4>
-                    </section>
-                </div>
+
                 <div class="col-9 col-12-medium imp-medium">
 
                     <!-- Main Content -->
@@ -131,7 +121,15 @@
                             </div>
                         </section>
                     </div>
-
+                </div>
+                <div class="col-3 col-12-medium">
+                    <!-- Sidebar -->
+                    <section id="directory-content" class="directory-content">
+                        <h4><a href="#text-title" th:text="${article.title}"></a></h4>
+                        <div id="directory"></div>
+                        <h4><a href="#comments">发表评论</a></h4>
+                        <h4><a href="#comments-list">最新评论</a></h4>
+                    </section>
                 </div>
             </div>
         </div>
@@ -146,9 +144,7 @@
 
 </div>
 
-<script src="//cdn.bootcss.com/headroom/0.9.1/headroom.min.js"></script>
-<script src="//cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js"></script>
-<script th:src="@{/halcyonic/assets/js/jquery.min.js}"></script>
+
 
 <script type="text/javascript">
     $(function(){
@@ -157,8 +153,12 @@
     })
 
     function scollDir(){
+        if (window.innerWidth<981){
+            return;
+        }
         var h = $("#content").position();
         window.onscroll = function(){
+
             var topScroll = $(document).scrollTop(); //滚动的距离,距离顶部的距离
             if (topScroll>h.top){
                 $("#directory-content").css({top: 10});
