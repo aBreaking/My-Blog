@@ -4,6 +4,7 @@ package com.my.blog.website;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.dto.Types;
 import com.my.blog.website.model.Bo.ArchiveBo;
+import com.my.blog.website.model.Vo.ContentVo;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.utils.MapCache;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,6 +52,35 @@ public class ApplicationCache implements InitializingBean {
      */
     public void initArchives(){
         List<ArchiveBo> archives = siteService.getArchives();
-        mapCache.set("archives",archives);
+        /*mapCache.set("archives",archives);
+        for (ArchiveBo archiveBo : archives){
+            String date = archiveBo.getDate();
+            mapCache.hset("archives",date,archiveBo);
+        }*/
+
+        List<ArchiveBo> archiveBoList = new ArrayList<>();
+        if (archives.size()<=10){
+            archiveBoList.addAll(archives);
+        }else{
+            for (int i=0;i<10;i++){
+                ArchiveBo archiveBo = archives.get(i);
+                archiveBoList.add(archiveBo);
+                mapCache.hset("archives",archiveBo.getDate(),archiveBo);
+            }
+            ArchiveBo archiveBo = new ArchiveBo();
+            archiveBo.setDate(archives.get(10).getDate()+"以前");
+            int count = 0;
+            List<ContentVo> contentVoList = new ArrayList<>();
+            for (int i=10;i<archives.size();i++){
+                ArchiveBo bo = archives.get(i);
+                count += Integer.parseInt(bo.getCount());
+                contentVoList.addAll(bo.getArticles());
+            }
+            archiveBo.setCount(String.valueOf(count));
+            archiveBo.setArticles(contentVoList);
+            mapCache.hset("archives",archiveBo.getDate(),archiveBo);
+            archiveBoList.add(archiveBo);
+        }
+        mapCache.set("archives",archiveBoList);
     }
 }

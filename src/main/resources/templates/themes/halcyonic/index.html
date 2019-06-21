@@ -10,8 +10,8 @@
 		<link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
 		<link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/row.css}" />
-		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css?v=1.0}" />
-		<script th:src="@{/halcyonic/assets/js/myutil.js?v=1.0}"></script>
+		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css}" />
+		<script th:src="@{/halcyonic/assets/js/myutil.js}"></script>
 	</head>
 	<body>
 		<div id="header" th:fragment="nav">
@@ -21,21 +21,21 @@
 				<!-- Nav -->
 				<nav id="nav">
 					<a th:each="c : ${columns}" th:href="@{'/'+${c.slug}}" th:text="${c.name}"></a>
-
+					<a href="#">联系我</a>
 				</nav>
 			</div>
 		</div>
 		<div id="page-wrapper">
-			<!-- Content -->
+
+				<!-- Content -->
 				<section id="content" class="topic">
 					<div class="container">
 						<div class="row aln-center">
 							<div class="col-3 col-12-medium">
 
-								<!-- Left Sidebar -->
 								<section>
 									<header>
-										<h3>个人分类</h3>
+										<h3>分类</h3>
 									</header>
 									<ul class="link-list">
 										<li th:each="c : ${category}">
@@ -45,17 +45,25 @@
 								</section>
 								<section>
 									<header>
+										<h3>搜索</h3>
+									</header>
+									<form method="post" action="#">
+										<input type="text" name="demo-name" id="demo-name" value="" placeholder="搜索内容" />
+									</form>
+								</section>
+								<section>
+									<header>
 										<h3>归档</h3>
 									</header>
 									<ul class="link-list">
 										<li th:each="archive : ${archives}">
-											<a th:href="@{'/'+${archive.date}}" th:text="${archive.date}">loading</a>
+											<a th:href="@{'/archives/'+${archive.date}}" th:text="${archive.date}">loading</a>
 										</li>
 									</ul>
 								</section>
 								<section>
 									<header>
-										<h3>文章推荐</h3>
+										<h3>推荐</h3>
 									</header>
 									<ul class="link-list">
 										<li><a href="#">Sed dolore viverra</a></li>
@@ -64,7 +72,6 @@
 							</div>
 
 							<div class="col-9 col-12-medium" >
-
 								<section th:each="article: ${articles.list}">
 									<div class="row">
 										<div class="col-8 col-12-medium">
@@ -95,61 +102,13 @@
 						</div>
 					</div>
 				</section>
-
-
 			<!-- Footer -->
 				<section id="footer">
-					<div class="container">
-						<div class="row">
-							<div class="col-8 col-12-medium">
 
-								<!-- Links -->
-									<section>
-										<h2>更多</h2>
-										<div>
-											<div class="row">
-												<div class="col-3 col-12-small">
-													<ul class="link-list last-child">
-														<li><a href="#">Neque amet dapibus</a></li>
-														<li><a href="#">Sed mattis quis rutrum</a></li>
-														<li><a href="#">Accumsan suspendisse</a></li>
-														<li><a href="#">Eu varius vitae magna</a></li>
-													</ul>
-												</div>
-												<div class="col-3 col-12-small">
-													<ul class="link-list last-child">
-														<li><a href="#">Neque amet dapibus</a></li>
-														<li><a href="#">Sed mattis quis rutrum</a></li>
-														<li><a href="#">Accumsan suspendisse</a></li>
-														<li><a href="#">Eu varius vitae magna</a></li>
-													</ul>
-												</div>
-												<div class="col-3 col-12-small">
-													<ul class="link-list last-child">
-														<li><a href="#">Neque amet dapibus</a></li>
-														<li><a href="#">Sed mattis quis rutrum</a></li>
-														<li><a href="#">Accumsan suspendisse</a></li>
-														<li><a href="#">Eu varius vitae magna</a></li>
-													</ul>
-												</div>
-												<div class="col-3 col-12-small">
-													<ul class="link-list last-child">
-														<li><a href="#">Neque amet dapibus</a></li>
-														<li><a href="#">Sed mattis quis rutrum</a></li>
-														<li><a href="#">Accumsan suspendisse</a></li>
-														<li><a href="#">Eu varius vitae magna</a></li>
-													</ul>
-												</div>
-											</div>
-										</div>
-									</section>
-							</div>
-						</div>
-					</div>
 					<div id="copyright">
 						蜀ICP备18001554号
 						<br/>
-						&copy; Untitled. All rights reserved. | Design: <a href="http://html5up.net">liwei@abreaking</a>
+						&copy; Untitled. All rights reserved. | Design: <a href="http://www.abreaking.com">liwei@abreaking</a>
 					</div>
 				</section>
 		</div>

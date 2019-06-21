@@ -16,6 +16,7 @@ import com.my.blog.website.service.IContentService;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.utils.IPKit;
+import com.my.blog.website.utils.MapCache;
 import com.my.blog.website.utils.PatternKit;
 import com.my.blog.website.utils.TaleUtils;
 import com.vdurmont.emoji.EmojiParser;
@@ -53,13 +54,16 @@ public class IndexController extends BaseController {
     @Resource
     private ISiteService siteService;
 
+    //缓存的数据
+    private static final MapCache CACHE = MapCache.single();
+
     /**
      * 首页
      *
      * @return
      */
     @GetMapping(value = "/")
-    public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "12") int limit) {
+    public String index(HttpServletRequest request, @RequestParam(value = "limit", defaultValue = "9") int limit) {
         return this.index(request, 1, limit);
     }
 
@@ -72,7 +76,7 @@ public class IndexController extends BaseController {
      * @return 主页
      */
     @GetMapping(value = "page/{p}")
-    public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "12") int limit) {
+    public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "9") int limit) {
         p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
         PageInfo<ContentVo> articles = contentService.getContents(p, limit);
         request.setAttribute("articles", articles);
@@ -240,7 +244,6 @@ public class IndexController extends BaseController {
         }
     }
 
-
     /**
      * 分类页
      *
@@ -281,6 +284,14 @@ public class IndexController extends BaseController {
         List<ArchiveBo> archives = siteService.getArchives();
         request.setAttribute("archives", archives);
         return this.render("archives");
+    }
+
+    @GetMapping(value = "archives/{date}")
+    public String archivesDate(HttpServletRequest request, @PathVariable("date") String date) {
+        ArchiveBo archives = cache.hget("archives", date);
+        request.setAttribute("articles", new PageInfo<>(archives.getArticles()));
+        request.setAttribute("date",date);
+        return this.render("index");
     }
 
     /**
@@ -335,6 +346,7 @@ public class IndexController extends BaseController {
     public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
         PageInfo<ContentVo> articles = contentService.getArticles(keyword, page, limit);
+
         request.setAttribute("articles", articles);
         request.setAttribute("type", "搜索");
         request.setAttribute("keyword", keyword);
