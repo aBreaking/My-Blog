@@ -1286,8 +1286,59 @@ input[type="radio"] + label:before {
 	border-radius: 100%;
 }
 
-/* Icon */
 
+/* Contact Icons */
+
+ul.contact-icons {
+	list-style: none;
+	padding-left: 0;
+}
+
+ul.contact-icons > li {
+	margin: 1.25rem 0 0 0;
+	padding-left: 0;
+}
+
+ul.contact-icons > li:before {
+	display: inline-block;
+	width: 2.25rem;
+	height: 2.25rem;
+	line-height: 2.25rem;
+	border-radius: 2.25rem;
+	background-color: white;
+	color: #2e2b37;
+	cursor: default;
+	font-size: 1.125rem;
+	margin-right: 1rem;
+	text-align: center;
+	vertical-align: middle;
+}
+
+body.is-ie ul.contact-icons > li:before {
+	line-height: 2.125;
+}
+
+ul.contact-icons > li a {
+	border-bottom: 0;
+}
+
+ul.contact-icons.color1 > li:before {
+	color: #726193;
+}
+
+ul.contact-icons.color2 > li:before {
+	color: #e37b7c;
+}
+
+ul.contact-icons.color3 > li:before {
+	color: #ffe4b4;
+}
+
+ul.contact-icons.color4 > li:before {
+	color: #353865;
+}
+
+/* Icon */
 .icon {
 	text-decoration: none;
 	position: relative;
@@ -1305,6 +1356,11 @@ input[type="radio"] + label:before {
 
 .icon > .label {
 	display: none;
+}
+.divided{
+	padding: 1em;
+	border-right: solid 0.15rem rgba(255, 255, 255, 0.25);
+
 }
 
 /** by liwei **/

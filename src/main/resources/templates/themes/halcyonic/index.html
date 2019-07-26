@@ -29,6 +29,8 @@
 				<nav id="nav">
 					<a th:each="c : ${columns}" th:href="@{'/'+${c.slug}}" th:text="${c.name}"></a>
 					<a href="#">联系我</a>
+					<a href="#">友链</a>
+					<a href="#">关于</a>
 				</nav>
 			</div>
 		</div>
@@ -37,8 +39,6 @@
 				<section id="content" class="topic">
 					<div class="container">
 						<div class="row aln-center">
-
-
 							<div class="col-9 col-9-medium col-12-small" >
 								<section th:each="article: ${articles.list}">
 									<div class="row">

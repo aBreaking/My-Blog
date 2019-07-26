@@ -5,6 +5,7 @@ import com.my.blog.website.dto.Types;
 import com.my.blog.website.model.Vo.ContentVo;
 import com.my.blog.website.model.Vo.ContentVoExample;
 import com.my.blog.website.service.IContentService;
+import com.my.blog.website.utils.Commons;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -35,8 +36,7 @@ public class PoetryController extends BaseController{
 
     @GetMapping
     public String index(Model model){
-        PageInfo<ContentVo> pageInfo = query(1);
-        model.addAttribute("poetryList",pageInfo.getList());
+        model.addAttribute("poetryList", query(1).getList());
         model.addAttribute("pageNum",1);
         return this.render("poetry");
     }
@@ -53,6 +53,20 @@ public class PoetryController extends BaseController{
         contentVoExample.setOrderByClause("created desc");
         contentVoExample.createCriteria().andTypeEqualTo("poetry");
         contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
-        return contentService.getArticlesWithpage(contentVoExample, pageNum, LIMIT);
+        PageInfo<ContentVo> info = contentService.getArticlesWithpage(contentVoExample, pageNum, LIMIT);
+        convertMarkDown2Html(info);
+        return info;
+    }
+
+    /**
+     * markdown的文本转换
+     */
+    private void convertMarkDown2Html(PageInfo<ContentVo> pageInfos){
+        List<ContentVo> list = pageInfos.getList();
+        for (ContentVo contentVo : list){
+            String article = Commons.article(contentVo.getContent());
+            contentVo.setContent(article);
+        }
+        pageInfos.setList(list);
     }
 }

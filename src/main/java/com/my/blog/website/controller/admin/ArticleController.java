@@ -50,7 +50,7 @@ public class ArticleController extends BaseController {
                         @RequestParam(value = "limit", defaultValue = "15") int limit, HttpServletRequest request) {
         ContentVoExample contentVoExample = new ContentVoExample();
         contentVoExample.setOrderByClause("created desc");
-        contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
+        //contentVoExample.createCriteria().andTypeEqualTo(Types.ARTICLE.getType());
         PageInfo<ContentVo> contentsPaginator = contentsService.getArticlesWithpage(contentVoExample, page, limit);
         request.setAttribute("articles", contentsPaginator);
         return "admin/article_list";
@@ -60,6 +60,7 @@ public class ArticleController extends BaseController {
     public String newArticle(HttpServletRequest request) {
         List<MetaVo> categories = metasService.getMetas(Types.CATEGORY.getType());
         request.setAttribute("categories", categories);
+        request.setAttribute("contents", new ContentVo());
         return "admin/article_edit";
     }
 
@@ -78,7 +79,9 @@ public class ArticleController extends BaseController {
     public RestResponseBo publishArticle(ContentVo contents, HttpServletRequest request) {
         UserVo users = this.user(request);
         contents.setAuthorId(users.getUid());
-        contents.setType(Types.ARTICLE.getType());
+        if (contents.getType()==null){
+            contents.setType(Types.ARTICLE.getType());
+        }
         if (StringUtils.isBlank(contents.getCategories())) {
             contents.setCategories("默认分类");
         }
@@ -94,7 +97,9 @@ public class ArticleController extends BaseController {
     public RestResponseBo modifyArticle(ContentVo contents, HttpServletRequest request) {
         UserVo users = this.user(request);
         contents.setAuthorId(users.getUid());
-        contents.setType(Types.ARTICLE.getType());
+        if (contents.getType()==null){
+            contents.setType(Types.ARTICLE.getType());
+        }
         String result = contentsService.updateArticle(contents);
         if (!WebConst.SUCCESS_RESULT.equals(result)) {
             return RestResponseBo.fail(result);
