@@ -10,7 +10,7 @@
 		<noscript><link rel="stylesheet" th:href="@{/halcyonic/assets/css/noscript.css}" /></noscript>
 	</head>
 	<body>
-    <div th:replace="themes/halcyonic/index :: nav"></div>
+    <div th:replace="themes/halcyonic/index :: headNav"></div>
 	<!-- Page Wrapper -->
 	<div class="is-preload">
 
@@ -87,7 +87,7 @@
 
 		}
 
-        var ctx = [[@{/}]];
+        var ctx = [[@{/}]]
 
 		function loadNextPage(){
             var nextPageNum = parseInt($("#pageNum").val())+1;

@@ -4,6 +4,9 @@ import com.github.pagehelper.PageInfo;
 import com.my.blog.website.model.Vo.ContentVoExample;
 import com.my.blog.website.model.Vo.ContentVo;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/3/13 013.
  */
@@ -65,6 +68,13 @@ public interface IContentService {
 
 
     /**
+     * 查询某个月里面的文章
+     * @param yearMonth
+     * @return
+     */
+    PageInfo<ContentVo> getArchiveArticles(Date yearMonth, Integer page, Integer limit);
+
+    /**
      * @param commentVoExample
      * @param page
      * @param limit
@@ -90,4 +100,12 @@ public interface IContentService {
      * @param newCatefory
      */
     void updateCategory(String ordinal,String newCatefory);
+
+
+    /**
+     * 推荐文章，目前暂时照浏览量推荐
+     * 这个不用分页，自己指定推荐文件数量。默认5个
+     * @return
+     */
+    List<ContentVo> recommendArticles(int limit);
 }

@@ -15,23 +15,21 @@ import com.my.blog.website.service.ICommentService;
 import com.my.blog.website.service.IContentService;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.ISiteService;
-import com.my.blog.website.utils.IPKit;
-import com.my.blog.website.utils.MapCache;
-import com.my.blog.website.utils.PatternKit;
-import com.my.blog.website.utils.TaleUtils;
+import com.my.blog.website.utils.*;
 import com.vdurmont.emoji.EmojiParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -79,8 +77,11 @@ public class IndexController extends BaseController {
     public String index(HttpServletRequest request, @PathVariable int p, @RequestParam(value = "limit", defaultValue = "9") int limit) {
         p = p < 0 || p > WebConst.MAX_PAGE ? 1 : p;
         PageInfo<ContentVo> articles = contentService.getContents(p, limit);
-        request.setAttribute("articles", articles);
 
+
+        request.setAttribute("articles", articles);
+        List<ContentVo> recommendArticles = contentService.recommendArticles(5);
+        request.setAttribute("recommends",recommendArticles);
         if (p > 1) {
             this.title(request, "第" + p + "页");
         }
@@ -166,6 +167,7 @@ public class IndexController extends BaseController {
 
     /**
      * 评论操作
+     * 評論的這些
      */
     @PostMapping(value = "comment")
     @ResponseBody
@@ -231,11 +233,12 @@ public class IndexController extends BaseController {
             if (StringUtils.isNotBlank(url)) {
                 cookie("tale_remember_url", URLEncoder.encode(url, "UTF-8"), 7 * 24 * 60 * 60, response);
             }
-            // 设置对每个文章1分钟可以评论一次
-            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
+
             if (!WebConst.SUCCESS_RESULT.equals(result)) {
                 return RestResponseBo.fail(result);
             }
+            // 设置对每个文章1分钟可以评论一次
+            cache.hset(Types.COMMENTS_FREQUENCY.getType(), val, 1, 60);
             return RestResponseBo.ok();
         } catch (Exception e) {
             String msg = "评论发布失败";
@@ -265,33 +268,27 @@ public class IndexController extends BaseController {
 
         PageInfo<ContentVo> contentsPaginator = contentService.getArticles(metaDto.getMid(), page, limit);
 
-        request.setAttribute("articles", contentsPaginator);
         request.setAttribute("meta", metaDto);
-        request.setAttribute("type", "分类");
-        request.setAttribute("keyword", keyword);
-
-        return this.render("page-category");
+        return renderType(request,"category",keyword,contentsPaginator);
     }
-
 
     /**
      * 归档页
      *
      * @return
      */
-    @GetMapping(value = "archives")
-    public String archives(HttpServletRequest request) {
-        List<ArchiveBo> archives = siteService.getArchives();
-        request.setAttribute("archives", archives);
-        return this.render("archives");
+    @GetMapping(value = "archive/{keyword}")
+    public String archive(HttpServletRequest request, @PathVariable("keyword") String keyword,@RequestParam(value = "limit", defaultValue = "12") int limit) {
+        return archives(request,keyword,1,limit);
     }
 
-    @GetMapping(value = "archives/{date}")
-    public String archivesDate(HttpServletRequest request, @PathVariable("date") String date) {
-        ArchiveBo archives = cache.hget("archives", date);
-        request.setAttribute("articles", new PageInfo<>(archives.getArticles()));
-        request.setAttribute("date",date);
-        return this.render("index");
+    @GetMapping(value = "archive/{keyword}/{page}")
+    public String archives(HttpServletRequest request,@PathVariable("keyword") String keyword,
+                           @PathVariable("page") int page,@RequestParam(value = "limit", defaultValue = "12") int limit) {
+        Date sd = DateKit.dateFormat(keyword, "yyyy年MM月");
+        PageInfo<ContentVo> contents = contentService.getArchiveArticles(sd, page, limit);
+
+        return renderType(request,"archive",keyword,contents);
     }
 
     /**
@@ -337,20 +334,16 @@ public class IndexController extends BaseController {
      * @param keyword
      * @return
      */
-    @GetMapping(value = "search/{keyword}")
-    public String search(HttpServletRequest request, @PathVariable String keyword, @RequestParam(value = "limit", defaultValue = "12") int limit) {
+    @GetMapping(value = "search")
+    public String search(HttpServletRequest request,String keyword, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         return this.search(request, keyword, 1, limit);
     }
 
-    @GetMapping(value = "search/{keyword}/{page}")
-    public String search(HttpServletRequest request, @PathVariable String keyword, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
+    @GetMapping(value = "search/{page}")
+    public String search(HttpServletRequest request, String keyword, @PathVariable int page, @RequestParam(value = "limit", defaultValue = "12") int limit) {
         page = page < 0 || page > WebConst.MAX_PAGE ? 1 : page;
         PageInfo<ContentVo> articles = contentService.getArticles(keyword, page, limit);
-
-        request.setAttribute("articles", articles);
-        request.setAttribute("type", "搜索");
-        request.setAttribute("keyword", keyword);
-        return this.render("page-category");
+        return renderType(request,"search",keyword,articles);
     }
 
     /**
@@ -416,6 +409,11 @@ public class IndexController extends BaseController {
         return this.render("page-category");
     }
 
+    @GetMapping("page-on-building")
+    public String pageOnBuilding(){
+        return this.render("page-building");
+    }
+
     /**
      * 设置cookie
      *
@@ -446,6 +444,13 @@ public class IndexController extends BaseController {
         }
         cache.hset(Types.HITS_FREQUENCY.getType(), val, 1, WebConst.HITS_LIMIT_TIME);
         return false;
+    }
+
+    private String renderType(HttpServletRequest request,String type,String keyword,PageInfo pageInfo) {
+        request.setAttribute("articles", pageInfo);
+        request.setAttribute("type", type);
+        request.setAttribute("keyword", keyword);
+        return this.render("page-category");
     }
 
 }

@@ -82,7 +82,8 @@ public class BaseInterceptor implements HandlerInterceptor {
         httpServletRequest.setAttribute("adminCommons", adminCommons);
         httpServletRequest.setAttribute("columns", cache.hget("meta",Types.COLUMN.getType()));
         httpServletRequest.setAttribute("category", cache.hget("meta",Types.CATEGORY.getType()));
-        httpServletRequest.setAttribute("archives", cache.get("archives"));
+        httpServletRequest.setAttribute("archives", cache.hget("meta",Types.ARCHIVE.getType()));
+        httpServletRequest.setAttribute("tags", cache.hget("meta",Types.TAG.getType()));
     }
 
     @Override

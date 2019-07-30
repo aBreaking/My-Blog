@@ -7,6 +7,7 @@ public enum Types {
     ARTICLE("post"),
     POETRY("poetry"),
     PUBLISH("publish"),
+    ARCHIVE("archive"),
     PAGE("page"),
     DRAFT("draft"),
     LINK("link"),

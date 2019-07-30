@@ -2,9 +2,11 @@ package com.my.blog.website;
 
 
 import com.my.blog.website.constant.WebConst;
+import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.dto.Types;
 import com.my.blog.website.model.Bo.ArchiveBo;
 import com.my.blog.website.model.Vo.ContentVo;
+import com.my.blog.website.model.Vo.MetaVo;
 import com.my.blog.website.service.IMetaService;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.utils.MapCache;
@@ -35,7 +37,6 @@ public class ApplicationCache implements InitializingBean {
     @Override
     public void afterPropertiesSet()  {
         initMetas();
-        initArchives();
     }
 
     /**
@@ -45,42 +46,43 @@ public class ApplicationCache implements InitializingBean {
         mapCache.hset("meta",Types.COLUMN.getType(),metaService.getMetaList(Types.COLUMN.getType(), null, WebConst.MAX_POSTS));
         mapCache.hset("meta",Types.CATEGORY.getType(),metaService.getMetaList(Types.CATEGORY.getType(), null, WebConst.MAX_POSTS));
         mapCache.hset("meta",Types.TAG.getType(),metaService.getMetaList(Types.TAG.getType(), null, WebConst.MAX_POSTS));
+        mapCache.hset("meta",Types.ARCHIVE.getType(),getArchives());
     }
 
     /**
      * 初始化归档数据
      */
-    public void initArchives(){
+    public List<MetaDto> getArchives(){
         List<ArchiveBo> archives = siteService.getArchives();
-        /*mapCache.set("archives",archives);
-        for (ArchiveBo archiveBo : archives){
-            String date = archiveBo.getDate();
-            mapCache.hset("archives",date,archiveBo);
-        }*/
+        List<MetaDto> metaList = new ArrayList<>();
+        //归档的日期，最多只展示10个
+        int size = archives.size()>10?10:archives.size();
 
-        List<ArchiveBo> archiveBoList = new ArrayList<>();
-        if (archives.size()<=10){
-            archiveBoList.addAll(archives);
-        }else{
-            for (int i=0;i<10;i++){
-                ArchiveBo archiveBo = archives.get(i);
-                archiveBoList.add(archiveBo);
-                mapCache.hset("archives",archiveBo.getDate(),archiveBo);
-            }
-            ArchiveBo archiveBo = new ArchiveBo();
-            archiveBo.setDate(archives.get(10).getDate()+"以前");
+        for (int i=0;i<size;i++){
+            ArchiveBo archiveBo = archives.get(i);
+            MetaDto meta = new MetaDto();
+            meta.setName(archiveBo.getDate());
+            meta.setSlug(archiveBo.getDate());
+            meta.setType(Types.ARCHIVE.getType());
+            meta.setSort(i);
+            meta.setCount(Integer.parseInt(archiveBo.getCount()));
+            metaList.add(meta);
+        }
+        //归档多于10个，就写成 xxxx年xx月以前
+        if (archives.size()>10){
+            MetaDto meta = new MetaDto();
+            meta.setName(archives.get(10).getDate()+"以前");
+            meta.setSlug(archives.get(10).getDate()+"以前");
+            meta.setType(Types.ARCHIVE.getType());
             int count = 0;
-            List<ContentVo> contentVoList = new ArrayList<>();
             for (int i=10;i<archives.size();i++){
                 ArchiveBo bo = archives.get(i);
                 count += Integer.parseInt(bo.getCount());
-                contentVoList.addAll(bo.getArticles());
             }
-            archiveBo.setCount(String.valueOf(count));
-            archiveBo.setArticles(contentVoList);
-            mapCache.hset("archives",archiveBo.getDate(),archiveBo);
-            archiveBoList.add(archiveBo);
+            meta.setCount(count);
+            meta.setSort(size+1);
+            metaList.add(meta);
         }
-        mapCache.set("archives",archiveBoList);
+        return metaList;
     }
 }

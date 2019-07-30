@@ -9,8 +9,10 @@
 		<meta name="description" th:content="${description ?:commons.site_option('site_description')}"/>
 		<link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
 		<link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
+
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/row.css}" />
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css}" />
+
 		<script th:src="@{/halcyonic/assets/js/jquery.min.js}"></script>
 		<script th:src="@{/halcyonic/assets/js/browser.min.js}"></script>
 		<script th:src="@{/halcyonic/assets/js/breakpoints.min.js}"></script>
@@ -21,109 +23,110 @@
 	</head>
 
 	<body>
-		<div id="header" th:fragment="nav">
-			<div class="container">
+		<div id="header" th:fragment="headNav">
+			<div  class="container">
 				<!-- Logo -->
 				<h1><a href="index.html" id="logo">Abreaking</a></h1>
 				<!-- Nav -->
 				<nav id="nav">
 					<a th:each="c : ${columns}" th:href="@{'/'+${c.slug}}" th:text="${c.name}"></a>
-					<a href="#">联系我</a>
-					<a href="#">友链</a>
-					<a href="#">关于</a>
+					<a th:href="@{'/page-on-building'}">联系我</a>
+					<a th:href="@{'/page-on-building'}">友链</a>
+					<a th:href="@{'/page-on-building'}">关于</a>
 				</nav>
 			</div>
 		</div>
-		<div id="page-wrapper">
-				<!-- Content -->
-				<section id="content" class="topic">
-					<div class="container">
-						<div class="row aln-center">
-							<div class="col-9 col-9-medium col-12-small" >
-								<section th:each="article: ${articles.list}">
-									<div class="row">
-										<div class="col-8 col-12-small">
-											<header>
-												<h2><a class="index-title" th:href="${commons.permalink(article)}" th:text="${article.title}">...</a></h2>
-												<small>
-													<script th:inline="javascript">
-														var ts = [[${article.created}]]
-														document.write(dateFormatByTimestamp(ts));
-													</script>
-												</small>
-												| <small th:utext="${commons.show_categories(article.categories)}"></small>
-											</header>
-											<p>
-												<div th:text="${article.summary}"></div>
-											</p>
-										</div>
-										<div class="col-4 col-12-small post-thumbnail" >
-											<a th:href="${commons.permalink(article)}">
-												<div th:style="'background-image:url('+@{${commons.show_thumb(article)}}+');'"></div>
-											</a>
 
-										</div>
-									</div>
-								</section>
-								<div th:replace="comm/macros::pageNav(${articles},'←','→','page')"></div>
+		<!-- Content -->
+		<div id="content">
+			<div class="container">
+				<div class="row aln-center">
+					<div class="col-9 col-9-medium col-12-small" >
+
+						<section th:each="article: ${articles.list}">
+							<div class="row">
+								<div class="col-8 col-12-small">
+									<header>
+										<h2><a class="index-title" th:href="${commons.permalink(article)}" th:text="${article.title}">...</a></h2>
+										<small>
+											<script th:inline="javascript">
+												var ts = [[${article.created}]]
+												document.write(dateFormatByTimestamp(ts));
+											</script>
+										</small>
+										| <small th:utext="${commons.show_categories(article.categories)}"></small>
+									</header>
+									<p>
+										<div th:text="${article.summary}"></div>
+									</p>
+								</div>
+								<div class="col-4 col-12-small post-thumbnail" >
+									<a th:href="${commons.permalink(article)}">
+										<div th:style="'background-image:url('+@{${commons.show_thumb(article)}}+');'"></div>
+									</a>
+								</div>
 							</div>
-
-							<div class="col-3 col-3-medium col-12-small">
-
-								<section class="nav">
-									<header>
-										<h3>分类</h3>
-									</header>
-									<ul class="link-list">
-										<li th:each="c : ${category}">
-											<a th:href="@{'/category/'+${c.slug}}" th:text="${c.name}"></a>
-										</li>
-									</ul>
-								</section>
-								<section>
-									<header>
-										<h3>搜索</h3>
-									</header>
-									<form method="post" action="#">
-										<input type="text" name="demo-name" id="demo-name" value="" placeholder="搜索内容" />
-									</form>
-								</section>
-								<section>
-									<header>
-										<h3>归档</h3>
-									</header>
-									<ul class="link-list">
-										<li th:each="archive : ${archives}">
-											<a th:href="@{'/archives/'+${archive.date}}" th:text="${archive.date}">loading</a>
-										</li>
-									</ul>
-								</section>
-								<section>
-									<header>
-										<h3>推荐</h3>
-									</header>
-									<ul class="link-list">
-										<li><a href="#">Sed dolore viverra</a></li>
-									</ul>
-								</section>
-							</div>
-						</div>
+						</section>
+						<div th:replace="comm/macros::pageNav(${articles},'←','→','page')"></div>
 					</div>
-				</section>
-			<!-- Footer -->
-				<section id="footer">
 
-					<div id="copyright">
-						蜀ICP备18001554号
-						<br/>
-						&copy; Untitled. All rights reserved. | Design: <a href="http://www.abreaking.com">liwei@abreaking</a>
+					<div class="col-3 col-3-medium col-12-small">
+
+						<section id="category">
+							<header>
+								<h3>分类</h3>
+							</header>
+							<ul class="link-list">
+								<li th:each="c : ${category}">
+									<a th:href="@{'/category/'+${c.name}}" th:text="${c.name}"></a>
+								</li>
+							</ul>
+						</section>
+						<section id="search">
+							<header>
+								<h3>搜索</h3>
+							</header>
+							<form method="get" th:action="@{'/search'}">
+								<input type="search" name="keyword" placeholder="搜索内容" />
+							</form>
+						</section>
+						<section id="archive">
+							<header>
+								<h3>归档</h3>
+							</header>
+							<ul class="link-list">
+								<li th:each="archive : ${archives}">
+									<a th:href="@{'/archive/'+${archive.slug}}" th:text="${archive.name}">loading</a>
+								</li>
+							</ul>
+						</section>
+						<section id="recommend">
+							<header>
+								<h3>阅读排行</h3>
+							</header>
+							<ul class="link-list">
+								<li th:each="recommend : ${recommends}">
+									<a th:href="${commons.permalink(recommend)}" th:text="${recommend.title}">loading</a>
+								</li>
+							</ul>
+						</section>
 					</div>
-				</section>
+				</div>
+			</div>
+		</div>
+
+		<!-- Footer -->
+		<div id="footer" th:fragment="footer">
+
+			<div id="copyright">
+				蜀ICP备18001554号
+				<br/>
+				&copy; Untitled. All rights reserved. | Design: <a href="http://www.abreaking.com">liwei@abreaking</a>
+			</div>
 		</div>
 
 
 	</body>
-
 
 
 </html>

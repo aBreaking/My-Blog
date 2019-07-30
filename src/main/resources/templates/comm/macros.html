@@ -19,6 +19,33 @@
 
 </ol>
 
+<div th:fragment="pageTagNav(pageInfo,keyword)">
+    <div class="clearfix">
+        <ul class="page-navigator ">
+            <li th:if="${pageInfo.hasPreviousPage}">
+                <a th:href="@{'/'+${keyword}+'/'+${pageInfo.prePage}}" aria-label="Previous">
+                    <i class="fa fa-angle-left"></i>&nbsp;上一页
+                </a>
+            </li>
+
+            <th:block th:if="${pageInfo.pages>1}" th:each="nav : ${pageInfo.navigatepageNums}">
+                <li th:class="${nav==pageInfo.pageNum}?'current':''"><a th:href="@{'/'+${keyword}+'/'+${nav}}" th:text="${nav}"></a>
+                </li>
+            </th:block>
+
+            <th:block th:if="${pageInfo.hasNextPage}">
+                <li>
+                    <a th:href="@{'/'+${keyword}+'/'+${pageInfo.nextPage}}" aria-label="Next">
+                        下一页&nbsp;<i class="fa fa-angle-right"></i>
+                    </a>
+                </li>
+            </th:block>
+
+        </ul>
+    </div>
+</div>
+
+
 <div th:fragment="pageAdminNav(pageInfo)">
     <div class="clearfix">
         <ul class="pagination m-b-5 pull-right">

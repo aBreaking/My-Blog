@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -158,9 +159,24 @@ public class ContentServiceImpl implements IContentService {
         criteria.andTypeEqualTo(Types.ARTICLE.getType());
         criteria.andStatusEqualTo(Types.PUBLISH.getType());
         criteria.andTitleLike("%" + keyword + "%");
+
         contentVoExample.setOrderByClause("created desc");
         List<ContentVo> contentVos = contentDao.selectByExampleWithBLOBs(contentVoExample);
         return new PageInfo<>(contentVos);
+    }
+
+    @Override
+    public PageInfo<ContentVo> getArchiveArticles(Date yearMonth, Integer page, Integer limit) {
+        PageHelper.startPage(page, limit);
+        ContentVoExample example = new ContentVoExample();
+        ContentVoExample.Criteria criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
+        example.setOrderByClause("created desc");
+        int start = DateKit.getUnixTimeByDate(yearMonth);
+        int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, yearMonth, 1)) - 1;
+        criteria.andCreatedGreaterThan(start);
+        criteria.andCreatedLessThan(end);
+        List<ContentVo> contents = contentDao.selectByExample(example);
+        return new PageInfo<>(contents);
     }
 
     @Override
@@ -189,6 +205,19 @@ public class ContentServiceImpl implements IContentService {
         ContentVoExample example = new ContentVoExample();
         example.createCriteria().andCategoriesEqualTo(ordinal);
         contentDao.updateByExampleSelective(contentVo, example);
+    }
+
+    @Override
+    public List<ContentVo> recommendArticles(int limit) {
+        if (limit == 0){
+            limit = 5;
+        }
+        ContentVoExample example = new ContentVoExample();
+        ContentVoExample.Criteria criteria = example.createCriteria();
+        criteria.andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
+        example.setOrderByClause("hits DESC,modified DESC");
+        example.setLimit(limit);
+        return contentDao.selectByExample(example);
     }
 
     @Override
