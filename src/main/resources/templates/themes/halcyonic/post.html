@@ -6,27 +6,27 @@
 <link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css"/>
 <script src="//cdn.bootcss.com/headroom/0.9.1/headroom.min.js"></script>
 <script src="//cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js"></script>
-
+<style type="text/css">
+    .next-region{
+        margin-top: 30px !important;
+    }
+</style>
 <body>
-<!-- Header -->
-<div th:replace="themes/halcyonic/index :: headNav"></div>
-<!-- Content -->
 <div id="page-wrapper">
-
-    <article id="content">
+    <div th:replace="themes/halcyonic/index :: headNav('post')"></div>
+    <div id="content">
         <div class="container">
             <div class="row">
 
                 <div class="col-9 col-12-medium imp-medium">
-
-                    <!-- Main Content -->
                     <section>
                         <header>
-                            <h1 id="text-title" th:text="${article.title}"></h1>
+                            <h2 id="text-title" th:text="${article.title}"></h2>
                             <div class="post-data">
-                                <time th:datetime="${commons.fmtdate(article.created)}" itemprop="datePublished" th:text="'发布于 '+ ${commons.fmtdate(article.created)}"></time>
-                                / <th:block th:utext="${commons.show_categories(article.categories)}"/> / <a href="#comments" th:text="${article.commentsNum ?: 0}+' 条评论'"></a> /
-                                <th:block th:text="${article.hits}"/>浏览
+                                <time th:datetime="${commons.fmtdate(article.created)}" itemprop="datePublished" th:text="${commons.fmtdate(article.created)}"></time>
+                                |  <th:block th:utext="${commons.show_categories(article.categories)}"/>
+                                | <a href="#comments" th:text="${article.commentsNum ?: 0}+' 条评论'"></a>
+                                | <th:block th:text="${article.hits}"/>浏览
                             </div>
                         </header>
                         <article id="post-content" class="markdown-body" itemprop="articleBody">
@@ -35,7 +35,7 @@
                     </section>
 
                     <div th:if="${article}!=null">
-                        <section th:id="${article.cid ?: 0}" class="comment-container">
+                        <section th:id="${article.cid ?: 0}" class="comment-container next-region">
                             <header>
                                 <h2>发表评论</h2>
                             </header>
@@ -70,11 +70,14 @@
                                 </div>
                             </div>
                         </section>
-                        <section id="comments-list" th:if="${comments}">
+                        <section  id="comments-list" th:if="${comments}">
                             <header>
                                 <h2>最新评论</h2>
                             </header>
                             <ol class="comment-list">
+                                <th:block th:if="${comments.size==0}">
+                                    来第一个评论吧！
+                                </th:block>
                                 <th:block th:each="comment :${comments.list}">
                                     <li th:id="'li-comment-'+${comment.coid}" class="comment-body comment-parent comment-odd">
                                         <div th:id="'comment-'+${comment.coid}">
@@ -90,11 +93,13 @@
                                                         </div>
                                                         <div class="">
                                                             <div class="comment-author">
-                                                                <a href="##" rel="external nofollow"
+                                                                <span th:if="${comment.url == ''}"  rel="external nofollow"
+                                                                   th:text="${comment.author}"></span>
+                                                                <a th:if="${comment.url != ''}" th:href="${comment.url}" rel="external nofollow"
                                                                    th:text="${comment.author}"></a>
                                                             </div>
                                                             <div>
-                                                                <time class="comment-time" th:text="${commons.fmtdate(comment.created)}"></time>
+                                                                <time class="comment-time" th:text="${commons.fmtdateFriendly(comment.created)}"></time>
                                                             </div>
                                                         </div>
 
@@ -122,7 +127,7 @@
                         </section>
                     </div>
                 </div>
-                <div class="col-3 col-12-medium">
+                <div class="col-3 col-12-medium hide-small">
                     <!-- Sidebar -->
                     <section id="directory-content" class="directory-content">
                         <h4><a href="#text-title" th:text="${article.title}"></a></h4>
@@ -133,17 +138,13 @@
                 </div>
             </div>
         </div>
-    </article>
-
-
+    </div>
     <!-- Copyright -->
     <div th:replace="themes/halcyonic/index :: footer"></div>
 
-
 </div>
 
-
-
+<div th:replace="themes/halcyonic/index :: myScript"></div>
 <script type="text/javascript">
     $(function(){
         scollDir();
@@ -161,7 +162,7 @@
             var topScroll = $(document).scrollTop(); //滚动的距离,距离顶部的距离
             if (topScroll>h.top){
                 $("#directory-content").css({top: 10});
-                document.getElementById("directory-content").style.position = 'fixed';
+                document.getElementById("directory-content").style.position = 'sticky';
 
             }else{
                 $("#directory-content").css({top: 0});

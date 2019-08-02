@@ -10,10 +10,13 @@ import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.spi.CalendarNameProvider;
 
 /**
  * 主题公共函数
@@ -195,6 +198,42 @@ public final class Commons {
             return DateKit.formatDateByUnixTime(unixTime, patten);
         }
         return "";
+    }
+
+    /**
+     * 时间格式化
+     * @param timestamp
+     * @return
+     */
+    public static String fmtdateFriendly(Integer timestamp){
+        Calendar dateTime = Calendar.getInstance();
+        dateTime.setTimeInMillis(timestamp * 1000L);
+        Calendar nowTime = Calendar.getInstance();
+
+        if (dateTime.get(Calendar.YEAR)!=nowTime.get(Calendar.YEAR)){
+            return dateTime.get(Calendar.YEAR)+"年"+(dateTime.get(Calendar.MONTH)+1)+"月"+dateTime.get(Calendar.DATE)+"日";
+        }
+        
+        if(nowTime.get(Calendar.DATE)==(dateTime.get(Calendar.DATE)+1)){	//昨天的
+            return "昨天";
+        }
+        if(nowTime.get(Calendar.DATE)==(dateTime.get(Calendar.DATE)+2)){	//前天的
+            return "前天";
+        }
+
+        if(nowTime.get(Calendar.DATE) == dateTime.get(Calendar.DATE)){	//同一天
+            if(nowTime.get(Calendar.HOUR_OF_DAY)>dateTime.get(Calendar.HOUR_OF_DAY)){
+                return (nowTime.get(Calendar.HOUR_OF_DAY)-dateTime.get(Calendar.HOUR_OF_DAY))+"小时前";
+            }
+            if(nowTime.get(Calendar.MINUTE)>dateTime.get(Calendar.MINUTE)){
+                return (nowTime.get(Calendar.MINUTE)-dateTime.get(Calendar.MINUTE))+"分钟前";
+            }
+            if(nowTime.get(Calendar.SECOND)>dateTime.get(Calendar.SECOND)){
+                return (nowTime.get(Calendar.SECOND)-dateTime.get(Calendar.SECOND))+"秒前";
+            }
+
+        }
+        return (dateTime.get(Calendar.MONTH)+1)+"月"+dateTime.get(Calendar.DATE)+"日";
     }
 
     /**

@@ -23,7 +23,7 @@
 			$(
 				'<div id="titleBar">' +
 					'<a href="#navPanel" class="toggle"></a>' +
-					'<span class="title">' + $('#logo').html() + '</span>' +
+					'<a href="'+$("#nav .active").attr("href")+'" class="title">'+$("#nav .active").text()+'</a>' +
 				'</div>'
 			)
 				.appendTo($body);
@@ -31,6 +31,9 @@
 		// Panel.
 			$(
 				'<div id="navPanel">' +
+					'<div id="abreaking">'+
+                	$('#abreaking').html()+
+					'</div>'+
 					'<nav>' +
 						$('#nav').navList() +
 					'</nav>' +
@@ -49,3 +52,18 @@
 				});
 
 })(jQuery);
+
+/**
+ * 滚动到顶部
+ * @param speed 速度，1-10
+ */
+function scroll2Top(speed){
+    var d = speed?speed:5;
+    var $document = $(document);
+    var intervalId = setInterval(function() {
+        if ($(document).scrollTop() <= 0){
+            clearInterval(intervalId);
+        }
+        $document.scrollTop($document.scrollTop() + (-20 * d));
+    }, 15);
+}

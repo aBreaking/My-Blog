@@ -1,35 +1,46 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
-		<title>Ethereal by HTML5 UP</title>
+		<title>沐风诗集</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-transform"/>
+		<meta http-equiv="Cache-Control" content="no-siteapp"/>
+		<meta name="keywords" th:content="${keywords ?: commons.site_option('site_keywords')}"/>
+		<meta name="description" th:content="${description ?:commons.site_option('site_description')}"/>
+		<link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/row.css}" />
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css}" />
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/poetry.css?v=1.0}" />
-		<noscript><link rel="stylesheet" th:href="@{/halcyonic/assets/css/noscript.css}" /></noscript>
+		<noscript><link rel="stylesheet" th:href="@{/halcyonic/assets/css/noscript.css}"/></noscript>
 	</head>
-	<body>
-    <div th:replace="themes/halcyonic/index :: headNav"></div>
-	<!-- Page Wrapper -->
-	<div class="is-preload">
+	<body class="is-preload">
+		<div th:replace="themes/halcyonic/index :: headNav('poetry')"></div>
 
+		<!-- Page Wrapper -->
 		<div id="page-wrapper">
 			<!-- Wrapper -->
-			<div id="wrapper">
+			<div href="#" id="wrapper">
 				<input id="pageNum" hidden="hidden" value="1">
 				<!-- Panel -->
-				<section class="panel color5" th:each="poetry : ${poetryList}">
-					<div class="intro color1">
+				<section class="panel" th:each="poetry : ${poetryList}">
+					<div class="intro color4 scroll-bar">
 						<h3 class="major" th:text="${poetry.title}"></h3>
 						<th:block th:utext="${poetry.content}"></th:block>
 					</div>
 				</section>
 
-				<section class="panel " id="page-load">
+				<section class="panel" id="page-load">
+
 					<a href="javascript:void(0)" onclick="loadNextPage()">
-						<i class="fa fa-angle-double-right"></i>
+						<span class="hide-small">
+							<i class="fa fa-angle-double-right fa-3x " aria-hidden="true"></i>
+						</span>
+						<span class="hide show-small">
+							<i class="fa fa-angle-double-down fa-3x " aria-hidden="true"></i>
+						</span>
 					</a>
+
 				</section>
 			</div>
 		</div>
@@ -40,73 +51,63 @@
 				<li><a id="last" href="javascript:void(0)" onclick="scrollNext(2)" class="button primary circle icon fa fa-angle-right">last</a></li>
 			</ul>
 		</div>
-	</div>
 
 
-	<!-- Scripts -->
-	<script th:src="@{/halcyonic/assets/js/myutil.js}"></script>
+		<div th:replace="themes/halcyonic/index :: myScript"></div>
+		<script th:src="@{/halcyonic/assets/js/scroll.js}"></script>
+		<script th:inline="javascript" type="text/javascript">
 
-	<script th:src="@{/halcyonic/assets/js/jquery.min.js}"></script>
-	<script th:src="@{/halcyonic/assets/js/browser.min.js}"></script>
-	<script th:src="@{/halcyonic/assets/js/breakpoints.min.js}"></script>
-	<script th:src="@{/halcyonic/assets/js/scroll.js}"></script>
-	<script th:src="@{/halcyonic/assets/js/main.js}"></script>
-	<script th:inline="javascript" type="text/javascript">
+			function scrollNext(direction){
+				var $document = $(document);
+				var intervalId = setInterval(function() {
+					$document.scrollLeft($document.scrollLeft() + (20 * direction));
 
-		function scrollNext(direction){
-            var $document = $(document);
-            var intervalId = setInterval(function() {
-                $document.scrollLeft($document.scrollLeft() + (20 * direction));
-
-            }, 25);
-            setTimeout(function(){
-                clearInterval(intervalId);
-			},400);
-		}
-
-
-		function appendMoreSection(list){
-            var plPage = $("#page-load")[0];
-            $("#page-load").remove();
-
-		    for (var i=0;i<list.length;i++){
-                var content = list[i];
-                $("#wrapper").append(
-                    '<section class="panel color5">' +
-                    '<div class="intro color3">' +
-                    '<h2 class="major">'+content.title+'</h2>' +
-                    content.content+
-                    '</div>' +
-                    '</section>');
+				}, 25);
+				setTimeout(function(){
+					clearInterval(intervalId);
+				},400);
 			}
 
 
+			function appendMoreSection(list){
+				var plPage = $("#page-load")[0];
+				$("#page-load").remove();
 
-
-            $("#wrapper").append(plPage);
-
-		}
-
-        var ctx = [[@{/}]]
-
-		function loadNextPage(){
-            var nextPageNum = parseInt($("#pageNum").val())+1;
-		    $.ajax({
-				url: ctx +"poetry/page/"+nextPageNum,
-				type: 'post',
-				dataType: 'json',
-				success: function(pageInfo){
-                    $("#pageNum").val(pageInfo.pageNum);
-
-					if (!pageInfo.hasNextPage){
-                        $("#page-load").html("没得了哟....");
-                    }
-                    appendMoreSection(pageInfo.list);
-                    scrollNext(2);
+				for (var i=0;i<list.length;i++){
+					var content = list[i];
+					$("#wrapper").append(
+						'<section class="panel">' +
+						'<div class="intro color4 scroll-bar">' +
+						'<h2 class="major">'+content.title+'</h2>' +
+						content.content+
+						'</div>' +
+						'</section>');
 				}
-			})
-		}
-	</script>
+
+				$("#wrapper").append(plPage);
+
+			}
+
+			var ctx = [[@{/}]];
+
+			function loadNextPage(){
+				var nextPageNum = parseInt($("#pageNum").val())+1;
+				$.ajax({
+					url: ctx +"poetry/page/"+nextPageNum,
+					type: 'post',
+					dataType: 'json',
+					success: function(pageInfo){
+						$("#pageNum").val(pageInfo.pageNum);
+
+						if (!pageInfo.hasNextPage){
+							$("#page-load").html("没得了哟....");
+						}
+						appendMoreSection(pageInfo.list);
+						scrollNext(2);
+					}
+				})
+			}
+		</script>
 
 	</body>
 </html>

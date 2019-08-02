@@ -36,6 +36,7 @@ public class ApplicationCache implements InitializingBean {
 
     @Override
     public void afterPropertiesSet()  {
+        ;
         initMetas();
     }
 

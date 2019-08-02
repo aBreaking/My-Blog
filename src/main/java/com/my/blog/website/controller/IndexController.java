@@ -21,6 +21,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -222,6 +223,9 @@ public class IndexController extends BaseController {
         comments.setAuthor(author);
         comments.setCid(cid);
         comments.setIp(request.getRemoteAddr());
+        if (StringUtils.isNotBlank(url)&&!url.startsWith("http")){
+            url = "http://"+url;
+        }
         comments.setUrl(url);
         comments.setContent(text);
         comments.setMail(mail);
@@ -409,8 +413,9 @@ public class IndexController extends BaseController {
         return this.render("page-category");
     }
 
-    @GetMapping("page-on-building")
-    public String pageOnBuilding(){
+    @GetMapping("page-on-building/{page}")
+    public String pageOnBuilding(@PathVariable("page") String page, Model model){
+        model.addAttribute("page",page);
         return this.render("page-building");
     }
 

@@ -1,5 +1,4 @@
 @import url(font-awesome.min.css);
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,300i,400i");
 
 @-moz-keyframes load-spinner {
     0% {
@@ -310,6 +309,7 @@ body.is-preload:before {
     pointer-events: none;
 }
 
+
 body.is-preload #wrapper {
     -moz-transform: translateX(2rem);
     -webkit-transform: translateX(2rem);
@@ -327,8 +327,6 @@ body.is-preload #wrapper {
         flex-direction: column;
         height: auto;
         width: 100%;
-        margin: 0 0 5rem 0;
-        box-shadow: 0 0.25rem 1.5rem 0.25rem rgba(46, 43, 55, 0.5);
         padding-right: 0px;
     }
 
@@ -1034,7 +1032,7 @@ body.is-preload #wrapper {
     overflow-x: hidden;
     overflow-y: auto;
     margin-left: 4em;
-    box-shadow: 0 2rem 4rem 0.25rem rgba(46, 43, 55, 0.575)
+    box-shadow: 0.75rem 0.5rem 1rem 0.1rem rgb(187, 187, 187)
 }
 
 .panel > * {
@@ -1066,9 +1064,13 @@ body.is-preload #wrapper {
 }
 
 .panel > *.color4 {
-    background-image: url("../../images/overlay.png"), linear-gradient(45deg, rgba(114, 97, 147, 0.25) 25%, rgba(227, 123, 124, 0.25) 50%, rgba(255, 228, 180, 0.25));
+    background-image: url("../../images/overlay.png"), linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, #ff9c5714 50%, rgba(255, 240, 236, 0.25));
+    background-image: url("../../images/overlay.png"),  -webkit-gradient(linear,100% 0%,100% 100%,from(rgba(255, 255, 255, 0.25)),to(rgba(255, 156, 87, 0.08)));
+    background-image: url("../../images/overlay.png"), -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, #ff9c5714 50%, rgba(255, 240, 236, 0.25));
+    background-image: url("../../images/overlay.png"), -o-linear-gradient(45deg, rgba(255, 255, 255, 0.25) 25%, #ff9c5714 50%, rgba(255, 240, 236, 0.25));
+
     background-size: 128px 128px, auto;
-    background-color: #353865;
+    background-color: #ffffff;
 }
 
 .panel > *.color1-alt {
@@ -1620,31 +1622,10 @@ body.is-preload #wrapper {
         flex-direction: column;
         margin-left: 0px;
         height: auto;
+        border-top: solid 1px #f8f8f8;
+        box-shadow: inset 0px 1px 0px 0px #ffffff;
     }
 
-    .panel > *.color1 {
-        background-image: url("../../images/overlay.png"), linear-gradient(135deg, rgba(114, 97, 147, 0.25) 25%, rgba(227, 123, 124, 0.25) 50%, rgba(255, 228, 180, 0.25));
-        background-size: 128px 128px, auto;
-        background-color: #726193;
-    }
-
-    .panel > *.color2 {
-        background-image: url("../../images/overlay.png"), linear-gradient(135deg, rgba(114, 97, 147, 0.25) 25%, rgba(227, 123, 124, 0.25) 50%, rgba(255, 228, 180, 0.25));
-        background-size: 128px 128px, auto;
-        background-color: #e37b7c;
-    }
-
-    .panel > *.color3 {
-        background-image: url("../../images/overlay.png"), linear-gradient(135deg, rgba(114, 97, 147, 0.25) 25%, rgba(227, 123, 124, 0.25) 50%, rgba(255, 228, 180, 0.25));
-        background-size: 128px 128px, auto;
-        background-color: #ffe4b4;
-    }
-
-    .panel > *.color4 {
-        background-image: url("../../images/overlay.png"), linear-gradient(135deg, rgba(114, 97, 147, 0.25) 25%, rgba(227, 123, 124, 0.25) 50%, rgba(255, 228, 180, 0.25));
-        background-size: 128px 128px, auto;
-        background-color: #353865;
-    }
 
     .panel > *.color1-alt {
         background-image: url("../../images/overlay.png"), linear-gradient(135deg, rgba(114, 97, 147, 0.175) 25%, rgba(227, 123, 124, 0.175) 50%, rgba(255, 228, 180, 0.175));
@@ -2469,6 +2450,8 @@ button:disabled,
     flex-direction: column;
     box-shadow: none;
 }
-#page-load a{
-    font-size: 3.75rem;
+@media screen and (max-width: 736px) {
+    #page-load{
+        text-align: center;
+    }
 }

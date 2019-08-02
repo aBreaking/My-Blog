@@ -9,31 +9,30 @@
 		<meta name="description" th:content="${description ?:commons.site_option('site_description')}"/>
 		<link rel="shortcut icon" th:href="@{/user/img/favicon.png}"/>
 		<link rel="apple-touch-icon" th:href="@{/user/img/apple-touch-icon.png}"/>
-
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/row.css}" />
 		<link rel="stylesheet" th:href="@{/halcyonic/assets/css/main.css}" />
-
-		<script th:src="@{/halcyonic/assets/js/jquery.min.js}"></script>
-		<script th:src="@{/halcyonic/assets/js/browser.min.js}"></script>
-		<script th:src="@{/halcyonic/assets/js/breakpoints.min.js}"></script>
-		<script th:src="@{/halcyonic/assets/js/scroll.js}"></script>
-		<script th:src="@{/halcyonic/assets/js/util.js}"></script>
-		<script th:src="@{/halcyonic/assets/js/main.js}"></script>
-		<script th:src="@{/halcyonic/assets/js/myutil.js}"></script>
 	</head>
 
 	<body>
-		<div id="header" th:fragment="headNav">
+	<div id="page-wrapper">
+		<div id="header" th:fragment="headNav(active)">
+
 			<div  class="container">
-				<!-- Logo -->
-				<h1><a href="index.html" id="logo">Abreaking</a></h1>
-				<!-- Nav -->
+				<div id="abreaking">
+					<h1>
+						<a href="http://blog.abreaking.com" id="logo">Abreaking</a>
+						<small style="display: block">李维的个人博客</small>
+					</h1>
+				</div>
+
 				<nav id="nav">
-					<a th:each="c : ${columns}" th:href="@{'/'+${c.slug}}" th:text="${c.name}"></a>
-					<a th:href="@{'/page-on-building'}">联系我</a>
-					<a th:href="@{'/page-on-building'}">友链</a>
-					<a th:href="@{'/page-on-building'}">关于</a>
+					<a th:class="${active==null||active eq 'post'}?'active':''" th:href="@{'/'}">程序人生</a>
+					<a th:class="${active eq 'poetry'}?'active':''" th:href="@{'/poetry'}">诗词年华</a>
+					<a th:class="${active eq 'contact'}?'active':''" th:href="@{'/page-on-building/contact'}">联系我</a>
+					<a th:class="${active eq 'links'}?'active':''" th:href="@{'/page-on-building/links'}">友链</a>
+					<a th:class="${active eq 'about'}?'active':''" th:href="@{'/page-on-building/about'}">关于</a>
 				</nav>
+
 			</div>
 		</div>
 
@@ -48,16 +47,11 @@
 								<div class="col-8 col-12-small">
 									<header>
 										<h2><a class="index-title" th:href="${commons.permalink(article)}" th:text="${article.title}">...</a></h2>
-										<small>
-											<script th:inline="javascript">
-												var ts = [[${article.created}]]
-												document.write(dateFormatByTimestamp(ts));
-											</script>
-										</small>
+										<time th:text="${commons.fmtdateFriendly(article.created)}"></time>
 										| <small th:utext="${commons.show_categories(article.categories)}"></small>
 									</header>
 									<p>
-										<div th:text="${article.summary}"></div>
+									<div th:text="${article.summary}"></div>
 									</p>
 								</div>
 								<div class="col-4 col-12-small post-thumbnail" >
@@ -87,7 +81,7 @@
 								<h3>搜索</h3>
 							</header>
 							<form method="get" th:action="@{'/search'}">
-								<input type="search" name="keyword" placeholder="搜索内容" />
+								<input type="search" name="keyword" placeholder="搜索内容，按回车提交" />
 							</form>
 						</section>
 						<section id="archive">
@@ -117,13 +111,51 @@
 
 		<!-- Footer -->
 		<div id="footer" th:fragment="footer">
+			<div class="align-center">
+				<!-- 这里加个🚀 -->
+				<a class="icon-large" href="javascript:void(0)" onclick="scroll2Top()">
+					<img th:src="@{/halcyonic/icon/rocket.svg}" >
+				</a>
+			</div>
 
-			<div id="copyright">
+			<div id="copyright" >
+
+				Design and developed by <a href="http://www.abreaking.com">liwei</a>
+				,
+				Power by <a href="https://github.com/ZHENFENG13/My-Blog">My-Blog</a>
+				and
+				<a href="https://pixelarity.com/">PIXELARITY</a>
+				<br>
+				© CopyRight 2018-2019 abreaking.com. All rights reserved.
+				<br>
 				蜀ICP备18001554号
-				<br/>
-				&copy; Untitled. All rights reserved. | Design: <a href="http://www.abreaking.com">liwei@abreaking</a>
+				<!--<div class="col-12">
+						<ul class="contact-icons">
+							<li>
+								<a class="icon" href="https://github.com/aBreaking/abreaking-blog">
+									<img th:src="@{/halcyonic/icon/github.svg}" >
+								</a>
+							</li>
+
+							<li>
+								<a class="icon" href="https://blog.csdn.net/abreaking2012">
+									<img th:src="@{/halcyonic/icon/csdn.svg}" >
+								</a>
+							</li>
+						</ul>
+					</div>-->
 			</div>
 		</div>
+
+
+	</div>
+	<div th:fragment="myScript">
+		<script th:src="@{/halcyonic/assets/js/jquery.min.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/browser.min.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/breakpoints.min.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/util.js}"></script>
+		<script th:src="@{/halcyonic/assets/js/main.js}"></script>
+	</div>
 
 
 	</body>

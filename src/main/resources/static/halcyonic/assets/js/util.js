@@ -9,7 +9,6 @@
 		var	$this = $(this);
 		var	$a = $this.find('a'),
 			b = [];
-
 		$a.each(function() {
 
 			var	$this = $(this),
