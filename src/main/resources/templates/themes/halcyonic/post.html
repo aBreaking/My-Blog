@@ -6,11 +6,6 @@
 <link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css"/>
 <script src="//cdn.bootcss.com/headroom/0.9.1/headroom.min.js"></script>
 <script src="//cdn.bootcss.com/highlight.js/9.9.0/highlight.min.js"></script>
-<style type="text/css">
-    .next-region{
-        margin-top: 30px !important;
-    }
-</style>
 <body>
 <div id="page-wrapper">
     <div th:replace="themes/halcyonic/index :: headNav('post')"></div>
@@ -41,27 +36,24 @@
                             </header>
                             <div id="comments" class="clearfix">
                                 <div th:if="${article.allowComment}">
-                                    <form id="comment-form" method="post" action="#" onsubmit="return subComment();">
+                                    <form id="comment-form">
                                         <input type="hidden" name="coid" id="coid"/>
                                         <input type="hidden" name="cid" id="cid" th:value="${article.cid}"/>
                                         <input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
                                         <div class="fields">
-                                            <div class="field third">
+                                            <div class="field half">
                                                 <input placeholder="怎么称呼" type="text" name="author" id="name" />
                                             </div>
-                                            <div class="field third">
+                                            <div class="field half">
                                                 <input placeholder="你的邮箱" type="email" name="mail" id="email" />
-                                            </div>
-                                            <div class="field third">
-                                                <input placeholder="你的网站" type="text" name="url" id="url" />
                                             </div>
                                             <div class="field">
                                                 <label for="message">Message</label>
-                                                <textarea placeholder="来都来了，说两句呗" name="text" id="message" rows="4"></textarea>
+                                                <textarea placeholder="来都来了，说两句呗。（支持markdown语法）" name="text" id="message" rows="4"></textarea>
                                             </div>
                                         </div>
                                         <ul class="actions">
-                                            <li><input type="submit" value="biu~" class="button primary" /></li>
+                                            <li><input type="button" onclick="subComment()"  value="biu~" class="button primary" /></li>
                                         </ul>
                                     </form>
                                 </div>
@@ -87,7 +79,7 @@
                                                     <div class="row">
                                                         <div class="col-xs-2 col-sm-2 col-md-2">
                                                             <img class="avatar"
-                                                                 th:src="@{${commons.gravatar(comment.mail)}(s='80',r='G',d='')}"
+                                                                 th:src="@{${commons.gravatar(comment.author)}(s='80',r='G',d='')}"
                                                                  th:title="${comment.author}"
                                                                  width="60" height="60"/>
                                                         </div>
@@ -105,9 +97,7 @@
 
                                                     </div>
                                                 </div>
-                                                <div class="comment-content">
-                                                    <span class="comment-author-at"></span>
-                                                    <p th:utext="${commons.article(comment.content)}"></p>
+                                                <div class="comment-content" th:utext="${commons.article(comment.content)}">
                                                 </div>
                                             </div>
                                         </div>
@@ -127,7 +117,7 @@
                         </section>
                     </div>
                 </div>
-                <div class="col-3 col-12-medium hide-small">
+                <div class="col-3 hide-medium hide-small">
                     <!-- Sidebar -->
                     <section id="directory-content" class="directory-content">
                         <h4><a href="#text-title" th:text="${article.title}"></a></h4>
@@ -146,6 +136,7 @@
 
 <div th:replace="themes/halcyonic/index :: myScript"></div>
 <script type="text/javascript">
+
     $(function(){
         scollDir();
         codeView();
@@ -177,27 +168,6 @@
         }
     }
 
-    function subComment() {
-        $.ajax({
-            type: 'post',
-            url: '/comment',
-            data: $('#comment-form').serialize(),
-            async: false,
-            dataType: 'json',
-            success: function (result) {
-                $('#comment-form input[name=coid]').val('');
-                if (result && result.success) {
-                    alert("评论已提交至后台审核!");
-                    window.location.reload();
-                } else {
-                    if (result.msg) {
-                        alert(result.msg);
-                    }
-                }
-            }
-        });
-        return false;
-    }
 </script>
 
 <script>

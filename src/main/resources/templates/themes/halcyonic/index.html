@@ -28,9 +28,9 @@
 				<nav id="nav">
 					<a th:class="${active==null||active eq 'post'}?'active':''" th:href="@{'/'}">程序人生</a>
 					<a th:class="${active eq 'poetry'}?'active':''" th:href="@{'/poetry'}">诗词年华</a>
-					<a th:class="${active eq 'contact'}?'active':''" th:href="@{'/page-on-building/contact'}">联系我</a>
-					<a th:class="${active eq 'links'}?'active':''" th:href="@{'/page-on-building/links'}">友链</a>
+					<a th:class="${active eq 'contact'}?'active':''" th:href="@{'/contact'}">联系我</a>
 					<a th:class="${active eq 'about'}?'active':''" th:href="@{'/page-on-building/about'}">关于</a>
+					<a th:class="${active eq 'links'}?'active':''" th:href="@{'/page-on-building/links'}">友链</a>
 				</nav>
 
 			</div>
@@ -44,7 +44,7 @@
 
 						<section th:each="article: ${articles.list}">
 							<div class="row">
-								<div class="col-8 col-12-small">
+								<div class="col-8 col-12-medium col-12-small">
 									<header>
 										<h2><a class="index-title" th:href="${commons.permalink(article)}" th:text="${article.title}">...</a></h2>
 										<time th:text="${commons.fmtdateFriendly(article.created)}"></time>
@@ -54,7 +54,7 @@
 									<div th:text="${article.summary}"></div>
 									</p>
 								</div>
-								<div class="col-4 col-12-small post-thumbnail" >
+								<div class="col-4 col-12-medium col-12-small post-thumbnail" >
 									<a th:href="${commons.permalink(article)}">
 										<div th:style="'background-image:url('+@{${commons.show_thumb(article)}}+');'"></div>
 									</a>
@@ -129,21 +129,6 @@
 				© CopyRight 2018-2019 abreaking.com. All rights reserved.
 				<br>
 				蜀ICP备18001554号
-				<!--<div class="col-12">
-						<ul class="contact-icons">
-							<li>
-								<a class="icon" href="https://github.com/aBreaking/abreaking-blog">
-									<img th:src="@{/halcyonic/icon/github.svg}" >
-								</a>
-							</li>
-
-							<li>
-								<a class="icon" href="https://blog.csdn.net/abreaking2012">
-									<img th:src="@{/halcyonic/icon/csdn.svg}" >
-								</a>
-							</li>
-						</ul>
-					</div>-->
 			</div>
 		</div>
 

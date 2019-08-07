@@ -175,7 +175,7 @@ public class IndexController extends BaseController {
     public RestResponseBo comment(HttpServletRequest request, HttpServletResponse response,
                                   @RequestParam Integer cid, @RequestParam Integer coid,
                                   @RequestParam String author, @RequestParam String mail,
-                                  @RequestParam String url, @RequestParam String text, @RequestParam String _csrf_token) {
+                                  @RequestParam(defaultValue = "") String url, @RequestParam String text, @RequestParam String _csrf_token) {
 
         String ref = request.getHeader("Referer");
         if (StringUtils.isBlank(ref) || StringUtils.isBlank(_csrf_token)) {
@@ -223,6 +223,7 @@ public class IndexController extends BaseController {
         comments.setAuthor(author);
         comments.setCid(cid);
         comments.setIp(request.getRemoteAddr());
+        url = url.trim();
         if (StringUtils.isNotBlank(url)&&!url.startsWith("http")){
             url = "http://"+url;
         }
@@ -412,6 +413,20 @@ public class IndexController extends BaseController {
 
         return this.render("page-category");
     }
+
+    /**
+     * 联系我，留言
+     * @return
+     */
+    @GetMapping(value = "contact")
+    public String Contact(HttpServletRequest request){
+        ContentVo contentVo = new ContentVo();
+        contentVo.setAllowComment(true);
+        contentVo.setCid(99);
+        completeArticle(request,contentVo);
+        return this.render("comment");
+    }
+
 
     @GetMapping("page-on-building/{page}")
     public String pageOnBuilding(@PathVariable("page") String page, Model model){

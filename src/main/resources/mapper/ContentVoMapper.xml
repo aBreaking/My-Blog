@@ -419,6 +419,9 @@
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
+      <if test="summary != null">
+        summary = #{summary,jdbcType=VARCHAR},
+      </if>
     </set>
     where cid = #{cid,jdbcType=INTEGER}
   </update>

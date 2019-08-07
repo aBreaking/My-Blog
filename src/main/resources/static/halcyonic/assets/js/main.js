@@ -67,3 +67,38 @@ function scroll2Top(speed){
         $document.scrollTop($document.scrollTop() + (-20 * d));
     }, 15);
 }
+
+/**
+ * 提交评论
+ * @returns {boolean}
+ */
+function subComment() {
+    $.ajax({
+        type: 'post',
+        url: '/comment',
+        data: $('#comment-form').serialize(),
+        /*async: false,*/
+        dataType: 'json',
+        success: function (result) {
+            $('#comment-form input[name=coid]').val('');
+            if (result && result.success) {
+                alert("评论已提交至后台审核!");
+                $("#comment-form")[0].reset();
+                return true;
+            } else {
+                if (result.msg) {
+                    alert(result.msg);
+                }
+            }
+        }
+    });
+    return false;
+}
+
+/**
+ * 去别的网站
+ * @param href
+ */
+function goHref(href){
+	window.open(href);
+}
