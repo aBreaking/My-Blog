@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-	<head th:fragment="head">
+	<head th:fragment="head(titleContent)">
+		<title th:text="${titleContent ?:commons.site_option('site_title')}"></title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<meta http-equiv="Cache-Control" content="no-transform"/>
@@ -16,7 +17,6 @@
 	<body>
 	<div id="page-wrapper">
 		<div id="header" th:fragment="headNav(active)">
-
 			<div  class="container">
 				<div id="abreaking">
 					<h1>
@@ -29,8 +29,8 @@
 					<a th:class="${active==null||active eq 'post'}?'active':''" th:href="@{'/'}">程序人生</a>
 					<a th:class="${active eq 'poetry'}?'active':''" th:href="@{'/poetry'}">诗词年华</a>
 					<a th:class="${active eq 'contact'}?'active':''" th:href="@{'/contact'}">联系我</a>
-					<a th:class="${active eq 'about'}?'active':''" th:href="@{'/page-on-building/about'}">关于</a>
-					<a th:class="${active eq 'links'}?'active':''" th:href="@{'/page-on-building/links'}">友链</a>
+					<!--<a th:class="${active eq 'about'}?'active':''" th:href="@{'/page-on-building/about'}">关于</a>
+					<a th:class="${active eq 'links'}?'active':''" th:href="@{'/page-on-building/links'}">友链</a>-->
 				</nav>
 
 			</div>

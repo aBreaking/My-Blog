@@ -7,7 +7,9 @@ import com.my.blog.website.dto.Types;
 import com.my.blog.website.model.Bo.ArchiveBo;
 import com.my.blog.website.model.Vo.ContentVo;
 import com.my.blog.website.model.Vo.MetaVo;
+import com.my.blog.website.model.Vo.OptionVo;
 import com.my.blog.website.service.IMetaService;
+import com.my.blog.website.service.IOptionService;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.utils.MapCache;
 import org.slf4j.Logger;
@@ -33,11 +35,24 @@ public class ApplicationCache implements InitializingBean {
     IMetaService metaService;
     @Resource
     private ISiteService siteService;
+    @Resource
+    private IOptionService optionService;
 
     @Override
     public void afterPropertiesSet()  {
-        ;
         initMetas();
+        initSysOptions();
+    }
+
+    /**
+     * 初始化t_options的数据
+     */
+    public void initSysOptions(){
+        List<OptionVo> options = optionService.getOptions();
+        for (OptionVo vo: options){
+            WebConst.initConfig.put(vo.getName(),vo.getValue());
+        }
+
     }
 
     /**

@@ -1,159 +1,27 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="themes/halcyonic/index :: head"></head>
+<head th:replace="themes/halcyonic/index :: head('')"></head>
 	<style type="text/css">
 
-	ul {
-		list-style: disc;
-		margin: 0 0 1.5rem 0;
-		padding-left: 1rem;
-	}
-
-	ul li {
-		padding-left: 0.5rem;
-	}
-
-	ul.contact-icons .icon:before {
-		display: inline-block;
-		width: 2.25rem;
-		height: 2.25rem;
-		line-height: 2.25rem;
-		border-radius: 2.25rem;
-		background-color: #000000;;
-		color: #2e2b37;
-		cursor: default;
-		font-size: 1.125rem;
-		margin-right: 1rem;
-		text-align: center;
-		vertical-align: middle;
-	}
-
-	body.is-ie ul.contact-icons > .icon:before {
-		line-height: 2.125;
-	}
-	ul.contact-icons {
-		list-style: none;
-		padding-left: 0;
-	}
-	ul.contact-icons > li {
-		margin: 1.25rem 0 0 0;
-		padding-left: 0;
-	}
-
-	ul.contact-icons > li a {
-		border-bottom: 0;
-	}
-
-	ul.contact-icons.color1 > li:before {
-		color: #ffffff;
-	}
-	ul.actions {
-		display: -moz-flex;
-		display: -webkit-flex;
-		display: -ms-flex;
-		display: flex;
-		cursor: default;
-		list-style: none;
-		margin-left: -0.75rem;
-		padding-left: 0;
-	}
-	ul.actions li {
-		padding: 0 0 0 0.75rem;
-		vertical-align: middle;
-	}
-
-	.panel > .inner.columns {
-		display: -moz-flex;
-		display: -webkit-flex;
-		display: -ms-flex;
-		display: flex;
-		-moz-justify-content: center;
-		-webkit-justify-content: center;
-		-ms-justify-content: center;
-		justify-content: center;
-		-moz-align-items: center;
-		-webkit-align-items: center;
-		-ms-align-items: center;
-		align-items: center;
-		-moz-flex-direction: row;
-		-webkit-flex-direction: row;
-		-ms-flex-direction: row;
-		flex-direction: row;
-	}
-	.panel > .inner {
-		padding: 2.5rem 2.5rem 2rem 2.5rem;
-		display: -moz-flex;
-		display: -webkit-flex;
-		display: -ms-flex;
-		display: flex;
-		-moz-flex-grow: 1;
-		-webkit-flex-grow: 1;
-		-ms-flex-grow: 1;
-		flex-grow: 1;
-		-moz-flex-shrink: 1;
-		-webkit-flex-shrink: 1;
-		-ms-flex-shrink: 1;
-		flex-shrink: 1;
-		-moz-justify-content: center;
-		-webkit-justify-content: center;
-		-ms-justify-content: center;
-		justify-content: center;
-		-moz-align-items: -moz-flex-start;
-		-webkit-align-items: -webkit-flex-start;
-		-ms-align-items: -ms-flex-start;
-		align-items: flex-start;
-		-moz-flex-direction: column;
-		-webkit-flex-direction: column;
-		-ms-flex-direction: column;
-		flex-direction: column;
-		position: relative;
-		width: 100%;
-	}
-	.panel > * {
-		position: relative;
-		min-width: 10rem;
-	}
-
-	.panel > .inner.columns.divided > .icon:before {
-		content: '';
-		position: absolute;
-		top: .5rem;
-		width: 2px;
-		height: 100%;
-		margin-left: -3.5rem;
-		background-color: rgba(0, 0, 0, 0.25);
-	}
-
-	.icon {
-		text-decoration: none;
-		position: relative;
-		border-bottom: none;
-	}
+		section.panel{
+			padding: 3rem 3rem 2.5rem 3rem !important;
+		}
+		#divided{
+			position: relative;
+		}
+		#divided:before {
+			content: '';
+			position: absolute;
+			top: .5rem;
+			width: 2px;
+			height: 100%;
+			margin-left: -3.5rem;
+			background-color: rgba(0, 0, 0, 0.15);
+		}
 
 
-	/**留言板块**/
-	#comment-board{
-		margin-top: 3.5em;
-		background-color: transparent !important;
-		margin-left: auto;
-		margin-right: auto;
-	}
 
-	li.comment-body{
-
-	}
-	.comment-panel{
-		background-color: #fff;
-		position: relative;
-		margin-bottom: 3.5em;
-		/*padding: 1.75em 2.75em .75em;*/
-		border: 1px solid #ddd;
-		border-radius: 5px;
-		box-shadow: 0 2px 2px rgba(0,0,0,0.05), 0 15px 100px 0 rgba(0,0,75,0.125);
-		transition: box-shadow ease-out .5s;
-		transition-delay: .2s;
-	}
-</style>
+	</style>
 	<body class="">
 		<div id="page-wrapper">
 
@@ -164,54 +32,57 @@
 			<div id="content">
 				<div class="container">
 					<div class="row" >
-						<section class="panel col-12">
-							<div class="inner columns divided row">
-								<div class="col-8">
-									<p>欢迎在这里留下你的脚印！你有什么想说的，还是想与我交换友链，或者你发现本站的bug，你都可以在这里写下你的留言。</p>
-									<form id="comment-form" >
-										<input type="hidden" name="coid" id="coid"/>
-										<input type="hidden" name="cid" id="cid" value="99"/>
-										<input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
-										<div class="fields">
-											<div class="field third">
-												<input placeholder="怎么称呼" type="text" name="author" id="name" />
+						<div class="col-12">
+							<section class="panel">
+								<div class="row">
+									<div class="col-8 col-12-medium col-12-small">
+										<p>欢迎在这里留下你的脚印！你有什么想说的，还是想与我交换友链，或者你发现本站的bug，你都可以在这里写下你的留言。</p>
+										<form id="comment-form" >
+											<input type="hidden" name="coid" id="coid"/>
+											<input type="hidden" name="cid" id="cid" value="99"/>
+											<input type="hidden" name="_csrf_token" th:value="${_csrf_token}"/>
+											<div class="fields">
+												<div class="field third">
+													<input placeholder="怎么称呼" type="text" name="author" id="name" />
+												</div>
+												<div class="field third">
+													<input placeholder="你的邮箱" type="email" name="mail" id="email" />
+												</div>
+												<div class="field third">
+													<input placeholder="你的网站" type="text" name="url" id="url" />
+												</div>
+												<div class="field">
+													<label for="message">Message</label>
+													<textarea placeholder="来都来了，说两句呗。" name="text" id="message" rows="4"></textarea>
+												</div>
 											</div>
-											<div class="field third">
-												<input placeholder="你的邮箱" type="email" name="mail" id="email" />
-											</div>
-											<div class="field third">
-												<input placeholder="你的网站" type="text" name="url" id="url" />
-											</div>
-											<div class="field">
-												<label for="message">Message</label>
-												<textarea placeholder="来都来了，说两句呗。" name="text" id="message" rows="4"></textarea>
-											</div>
-										</div>
-										<ul class="actions">
-											<li><input type="button" onclick="subComment()" value="biu~" class="button primary" /></li>
+											<ul class="actions">
+												<li><input type="button" onclick="subComment()" value="biu~" class="button primary" /></li>
+											</ul>
+										</form>
+										<span>tips：如果有留下你的邮箱，你的邮箱不会被别人看到，我会尽快回复你。</span>
+									</div>
+									<div class="col-1" ></div>
+									<div id="divided" class="col-3 col-12-medium col-12-small">
+										<p>或者你通过以下方式找到我</p>
+										<ul class="contact-icons color1">
+											<li class="icon">
+												<a href="https://github.com/aBreaking"><img th:src="@{/halcyonic/icon/github.svg}"></a>
+											</li>
+											<li class="icon">
+												<a href="https://blog.csdn.net/abreaking2012"><img th:src="@{/halcyonic/icon/csdn.svg}"></a>
+											</li>
+											<li class="icon">
+												<a href="https://www.toutiao.com/c/user/100164093841/#mid=1613400691819524"><img th:src="@{/halcyonic/icon/toutiao.svg}"></a>
+											</li>
+											<li class="icon">
+												<a onclick="mail()" href="javascript:void(0)"><img th:src="@{/halcyonic/icon/mail.svg}"></a>
+											</li>
 										</ul>
-									</form>
+									</div>
 								</div>
-								<div class="col-1"></div>
-								<div class="col-3 icon">
-									<p>或者你通过以下方式找到我</p>
-									<ul class="contact-icons color1">
-										<li class="icon">
-											<a href="https://github.com/aBreaking"><img th:src="@{/halcyonic/icon/github.svg}"></a>
-										</li>
-										<li class="icon">
-											<a href="https://blog.csdn.net/abreaking2012"><img th:src="@{/halcyonic/icon/csdn.svg}"></a>
-										</li>
-										<li class="icon">
-											<a href="https://www.toutiao.com/c/user/100164093841/#mid=1613400691819524"><img th:src="@{/halcyonic/icon/toutiao.svg}"></a>
-										</li>
-										<li class="icon">
-											<a onclick="mail()" href="javascript:void(0)"><img th:src="@{/halcyonic/icon/mail.svg}"></a>
-										</li>
-									</ul>
-								</div>
-							</div>
-						</section>
+							</section>
+						</div>
 
 						<div id="comment-board" class="col-8 col-10-medium col-12-small">
 
@@ -221,7 +92,7 @@
 								</th:block>
 								<th:block th:each="comment :${comments.list}">
 									<li th:id="'li-comment-'+${comment.coid}" class="comment-body comment-parent comment-odd">
-										<div th:id="'comment-'+${comment.coid}" class="comment-panel row">
+										<div th:id="'comment-'+${comment.coid}" class="comment-panel">
 											<div class="comment-view">
 												<div class="comment-header">
 													<!--设置get请求的参数-->
@@ -250,6 +121,7 @@
 												<div class="comment-content" th:utext="${commons.article(comment.content)}">
 												</div>
 											</div>
+
 										</div>
 									</li>
 								</th:block>

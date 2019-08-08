@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="themes/halcyonic/index :: head"></head>
+<head th:replace="themes/halcyonic/index :: head(${article.title})"></head>
 <link rel="stylesheet" th:href="@{/halcyonic/assets/css/github-markdown.css}"/>
 <link rel="stylesheet" href="http://cdn.bootcss.com/highlight.js/9.9.0/styles/xcode.min.css"/>
 <script src="//cdn.bootcss.com/headroom/0.9.1/headroom.min.js"></script>
