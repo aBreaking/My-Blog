@@ -24,4 +24,5 @@ nbdist/
 logs
 upload
 target
+out
 tale.sql
