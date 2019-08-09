@@ -162,10 +162,51 @@
 <script th:src="@{/admin/plugins/md/js/pagedown-extra.js}"></script>
 <script th:src="@{/admin/plugins/md/js/diff.js}"></script>
 <script th:src="@{/admin/plugins/md/js/md.js}"></script>
+<script th:src="@{/admin/plugins/layer/layer.min.js}"></script>
 
 <script th:src="@{//cdn.bootcss.com/multi-select/0.9.12/js/jquery.multi-select.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/select2/3.4.8/select2.min.js}"></script>
 <script th:src="@{//cdn.bootcss.com/jquery-toggles/2.0.4/toggles.min.js}"></script>
 <script th:src="@{/admin/js/article.js}"></script>
+<script type="text/javascript">
+    var interval = 30;
+    var intervalId;
+    $("#text").bind("input",function(){
+        if (!intervalId){
+            intervalId = setInterval(function(){
+                var title = $('#articleForm input[name=title]').val();
+                var content = $('#text').val();
+                if (title == '') {
+                    tale.alertWarn('请输入文章标题');
+                    return;
+                }
+                if (content == '') {
+                    tale.alertWarn('请输入文章内容');
+                    return;
+                }
+                $('#content-editor').val(content);
+                $("#articleForm #status").val(status);
+                $("#articleForm #categories").val($('#multiple-sel').val());
+                var params = $("#articleForm").serialize();
+                var url = $('#articleForm #cid').val() != '' ? '/admin/article/modify' : '/admin/article/publish';
+                tale.post({
+                    url:url,
+                    data:params,
+                    success: function (result) {
+                        if (result && result.success) {
+                            layer.msg("文章已存为草稿",{time:1000,shift: 5});
+                        } else {
+                            tale.alertError(result.msg || '保存文章失败');
+                        }
+                    }
+                });
+
+                clearInterval(intervalId);
+                intervalId = null;
+            },interval*1000)
+        }
+
+    })
+</script>
 </body>
 </html>
